@@ -37,9 +37,6 @@ public class EncodingFilter implements Filter {
         flag = flag && !requestURI.startsWith("/loginServlet");
         flag = flag && !requestURI.startsWith("/register.jsp");
         flag = flag && !requestURI.startsWith("/RegisterServlet");
-        flag = flag && !requestURI.startsWith(".css");
-        flag = flag && !requestURI.startsWith(".jpg");
-        flag = flag && !requestURI.startsWith(".png");
         if(flag){
             if(user==null){
                 PrintWriter out = resp.getWriter();
