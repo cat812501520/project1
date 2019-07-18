@@ -1,0 +1,24 @@
+CREATE TABLE USER(
+uid INT PRIMARY KEY AUTO_INCREMENT ,
+username VARCHAR(20) NOT NULL UNIQUE,
+PASSWORD VARCHAR(20) NOT NULL,
+sex VARCHAR(4),
+hobbys VARCHAR(100),
+phone CHAR(11),
+email VARCHAR(20),
+address VARCHAR(100),
+flag CHAR(1) DEFAULT '1'
+);
+
+CREATE TABLE goodsInfo(
+gid INT PRIMARY KEY AUTO_INCREMENT,
+goodsInfo_name VARCHAR(20) NOT NULL,
+goodsInfo_pic VARCHAR(100) ,
+goodsInfo_price DOUBLE NOT NULL,
+goodsInfo_description VARCHAR(50),
+goods_stock INT NOT NULL,
+flag CHAR(1) DEFAULT '1'
+);
+ 
+ 
+ 
