@@ -1,7 +1,12 @@
 package com.filter;
 
+import com.entity.User;
+
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class EncodingFilter implements Filter {
     private String encoding;
@@ -18,22 +23,33 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse
             , FilterChain filterChain) throws IOException, ServletException {
         System.out.println("EncodingFilter doFilter...");
-        // 1、设置请求的编码
         servletRequest.setCharacterEncoding(encoding);
-        // 2、设置响应的编码
-        // 服务器发送给客户的内容的编码方式
         servletResponse.setCharacterEncoding(encoding);
-        // 浏览器以什么编码方式执行
         servletResponse.setContentType("text/html;charset=utf-8");
-        // 3、继续执行客户端的请求
-        // 假如我们访问的url：http://localhost:8080/helloServlet
-        // 当Web服务器接收到请求后去web.xml中做地址映射，先看有没有Filter的配置
-        // 如果有，就再看Filter的<url-parttern>配置的值是否需要拦截当前请求
-        //      如果需要，则通过Web服务器调用doFilter()方法执行代码，
-        //      然后在这个方法内再调用filterChain.doFilter继续请求/helloServlet
-        //      web服务器去检查servlet-mapping配置的<url-parttern>
-        // 如果不需要就直接放行调用filterChain.doFilter继续请求/helloServlet
-        filterChain.doFilter(servletRequest, servletResponse);
+
+        Boolean flag =true;
+        HttpServletRequest req =(HttpServletRequest) servletRequest;
+        HttpServletResponse resp=(HttpServletResponse) servletResponse;
+        User user =(User) req.getSession().getAttribute("user");
+        String requestURI = req.getRequestURI();
+        flag = flag && !requestURI.startsWith("/login.jsp");
+        flag = flag && !requestURI.startsWith("/index.jsp");
+        flag = flag && !requestURI.startsWith("/loginServlet");
+        flag = flag && !requestURI.startsWith("/register.jsp");
+        flag = flag && !requestURI.startsWith("/RegisterServlet");
+        flag = flag && !requestURI.startsWith(".css");
+        flag = flag && !requestURI.startsWith(".jpg");
+        flag = flag && !requestURI.startsWith(".png");
+        if(flag){
+            if(user==null){
+                PrintWriter out = resp.getWriter();
+                out.println("<script type='text/javascript'>alert('请先登录或注册');location.href='index.jsp';</script>");
+            }else {
+                filterChain.doFilter(req,resp);
+            }
+        }else {
+            filterChain.doFilter(req,resp);
+        }
     }
 
     //销毁

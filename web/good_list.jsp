@@ -43,7 +43,14 @@
             <td>${goods.gid}</td>
             <td>${goods.goodsName}</td>
             <td>
-                <img src="upload/${goods.goodsPic}" width="100px" height="100px" />
+                <c:choose>
+                    <c:when test="${goods.goodsPic!=null&&''!=goods.goodsPic}">
+                        <img src="upload/${goods.goodsPic}" width="100px" height="100px" />
+                    </c:when>
+                    <c:otherwise>
+                       暂无图片
+                    </c:otherwise>
+                </c:choose>
             </td>
             <td>${goods.goodsPrice}</td>
             <td>${goods.goodsDescription}</td>
